@@ -12,30 +12,13 @@ from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()
 app = FastAPI()
 
-frontend_url = os.getenv("FRONTEND_URL", "")
-# Create a list of allowed origins, including both development and production URLs
-allowed_origins = [
-    frontend_url,
-    "http://localhost:3000",
-    "https://localhost:3000",
-    "http://127.0.0.1:3000",
-]
-
-# Add any additional URLs from environment if provided
-if frontend_url and frontend_url not in allowed_origins:
-    allowed_origins.append(frontend_url)
-
-print(f"CORS Origins allowed: {allowed_origins}")
-
+# Allow CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_origin_regex=r"https://.*\.vercel\.app$",  # Allow all Vercel preview deployments
+    allow_origins=["https://tubetalk-ai.vercel.app"],  # Frontend URL
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization"],
-    expose_headers=["Content-Type"],
-    max_age=86400,  # Cache CORS preflight requests for 24 hours
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Models for request data
