@@ -38,7 +38,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ videoId }) => {
 
         if (!res.ok) throw new Error("Failed to load video");
 
-        const data = await res.json();
+        const _ = await res.json();
         setMessages([
           {
             id: uuidv4(),
@@ -51,7 +51,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ videoId }) => {
         setMessages([
           {
             id: uuidv4(),
-            content: "Failed to load video transcript. Please try again.",
+            content: `Failed to load video transcript. Please try again. ${err}`,
             isUser: false,
           },
         ]);
@@ -107,7 +107,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ videoId }) => {
         ...prev,
         {
           id: uuidv4(),
-          content: "Sorry, there was an error fetching a response.",
+          content: `Sorry, there was an error fetching a response. ${error}`,
           isUser: false,
         },
       ]);

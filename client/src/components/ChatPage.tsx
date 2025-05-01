@@ -6,7 +6,11 @@ import { ArrowLeft } from "lucide-react";
 import YouTubeEmbed from "@/components/YoutubeEmbed";
 import ChatContainer from "@/components/ChatContainer";
 
-const ChatPage = ({ videoId }: any) => {
+type ChatPageProps = {
+  videoId: string;
+};
+
+const ChatPage = ({ videoId }: ChatPageProps) => {
   if (!videoId) {
     return (
       <div className="min-h-screen flex items-center justify-center">
