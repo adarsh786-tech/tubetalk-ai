@@ -12,13 +12,30 @@ from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()
 app = FastAPI()
 
-# Allow CORS for frontend
+frontend_url = os.getenv("FRONTEND_URL", "")
+# Create a list of allowed origins, including both development and production URLs
+allowed_origins = [
+    frontend_url,
+    "http://localhost:3000",
+    "https://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+# Add any additional URLs from environment if provided
+if frontend_url and frontend_url not in allowed_origins:
+    allowed_origins.append(frontend_url)
+
+print(f"CORS Origins allowed: {allowed_origins}")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("FRONTEND_URL")],  # Frontend URL
+    allow_origins=allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app$",  # Allow all Vercel preview deployments
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
+    expose_headers=["Content-Type"],
+    max_age=86400,  # Cache CORS preflight requests for 24 hours
 )
 
 # Models for request data
