@@ -38,7 +38,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ videoId }) => {
 
         if (!res.ok) throw new Error("Failed to load video");
 
-        const _ = await res.json();
+        const data = await res.json();
+        console.log(`Transcript: ${data}`);
         setMessages([
           {
             id: uuidv4(),
