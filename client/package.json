@@ -12,6 +12,7 @@
     "@langchain/community": "^0.3.41",
     "@langchain/core": "^0.3.48",
     "@langchain/google-genai": "^0.2.5",
+    "@langchain/qdrant": "^0.1.2",
     "@qdrant/js-client-rest": "^1.14.0",
     "@radix-ui/react-slot": "^1.2.0",
     "class-variance-authority": "^0.7.1",

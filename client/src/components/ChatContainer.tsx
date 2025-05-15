@@ -26,18 +26,15 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ videoId }) => {
     const loadVideo = async () => {
       setIsTyping(true);
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/load_video`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              youtube_url: `https://www.youtube.com/watch?v=${videoId}`,
-            }),
-          }
-        );
+        const res = await fetch(`/api/load_video`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            youtube_url: `https://www.youtube.com/watch?v=${videoId}`,
+          }),
+        });
 
         if (!res.ok) throw new Error("Failed to load video");
 
@@ -86,19 +83,16 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ videoId }) => {
     setIsTyping(true);
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/ask_question`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            video_id: videoId,
-            question: newMessage,
-          }),
-        }
-      );
+      const res = await fetch(`/api/ask_questions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          video_id: videoId,
+          question: newMessage,
+        }),
+      });
 
       const data = await res.json();
 
