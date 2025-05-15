@@ -1,3 +1,35 @@
+# Node.js dependencies
+node_modules/
+
+# TypeScript build outputs
+dist/
+build/
+
+# Environment variables
 .env
+.env.local
+
+# typescript build info file
+tsconfig.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Optional npm cache directory
+.npm/
 .venv/
-__pycache__/
+# Debugger configurations
+*.swp
+*.swo
