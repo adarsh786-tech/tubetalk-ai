@@ -1,9 +1,12 @@
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { Document } from "@langchain/core/documents";
+import {llmModel} from "@/lib/youtube/utils"
+import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
+import { QdrantLibArgs } from "@langchain/community/vectorstores/qdrant";
 
 export async function createVideoSummary(
   allChunks: Document[],
-  llmModel: any,
+  llmModel: llmModel,
   videoId: string
 ): Promise<string> {
   if (!allChunks || allChunks.length === 0)
@@ -45,9 +48,9 @@ export async function createVideoSummary(
 
 export async function uploadInChunks(
   docs: Document[],
-  embedder: any,
+  embedder: GoogleGenerativeAIEmbeddings,
   batchSize: number,
-  options: any
+  options: QdrantLibArgs
 ) {
   for (let i = 0; i < docs.length; i += batchSize) {
     const chunk = docs.slice(i, i + batchSize);
@@ -68,7 +71,7 @@ export async function uploadInChunks(
 
 export async function processQuery(
   query: string,
-  llmModel: any,
+  llmModel: llmModel,
   systemPrompt: string
 ): Promise<string> {
   if (!query.trim()) return "Please provide a valid question about the video.";
@@ -84,8 +87,9 @@ export async function processQuery(
 
 export async function getResponseForQuery(
   query: string,
-  videoData: any,
-  llmModel: any
+  // @typescript-eslint/no-explicit-any
+  videoData: any, // @typescript-eslint/no-explicit-any
+  llmModel: llmModel
 ): Promise<string> {
   if (!query.trim()) return "Please provide a valid question.";
 

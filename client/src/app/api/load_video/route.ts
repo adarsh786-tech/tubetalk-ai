@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       video_id: videoData.videoId,
       summary: videoData.summary,
     });
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
