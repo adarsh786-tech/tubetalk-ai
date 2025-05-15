@@ -1,17 +1,18 @@
 import { YoutubeTranscript } from "youtube-transcript";
-import { GoogleGenerativeAIEmbeddings} from "@langchain/google-genai";
+import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { Document } from "@langchain/core/documents";
-import { extractVideoId } from "@/lib/youtube/utils";
+import { extractVideoId, llmModel } from "@/lib/youtube/utils";
 import {
   createVideoSummary,
   uploadInChunks,
 } from "@/lib/youtube/queryProcessor";
-import {llmModel} from "@/lib/youtube/utils"
-import {TranscriptEntry} from "@/lib/youtube/types"
+import { TranscriptEntry } from "@/lib/youtube/types";
 
-
-export async function setupVideoBot(videoUrl: string, llmModel: llmModel ) {
+export async function setupVideoBot(
+  videoUrl: string,
+  llmModelInstance: typeof llmModel
+) {
   const videoId = extractVideoId(videoUrl);
   if (!videoId) throw new Error("Invalid YouTube URL");
 
@@ -20,8 +21,9 @@ export async function setupVideoBot(videoUrl: string, llmModel: llmModel ) {
     throw new Error("Could not retrieve transcript.");
   }
 
-  const transcriptDocs: Document[] = transcript.map((entry: TranscriptEntry) => {
-    const start = entry.start;
+  const transcriptDocs: Document[] = transcript.map((entry: any) => {
+    // Ensure entry has the required TranscriptEntry properties
+    const start = entry.start ?? 0;
     const mins = Math.floor(start / 60);
     const hrs = Math.floor(mins / 60);
     const timestamp = `${String(hrs).padStart(2, "0")}:${String(
@@ -56,7 +58,11 @@ export async function setupVideoBot(videoUrl: string, llmModel: llmModel ) {
     apiKey: process.env.QDRANT_API_KEY!,
   });
 
-  const summary = await createVideoSummary(filteredDocs, llmModel, videoId);
+  const summary = await createVideoSummary(
+    filteredDocs,
+    llmModelInstance,
+    videoId
+  );
   const fullTranscript = filteredDocs
     .map((doc) => `[${doc.metadata.timestamp}] ${doc.pageContent}`)
     .join("\n");
