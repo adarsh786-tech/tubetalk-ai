@@ -1,6 +1,5 @@
 import { YoutubeTranscript } from "youtube-transcript";
 import { GoogleGenerativeAIEmbeddings} from "@langchain/google-genai";
-import { BaseChatModel } from "@langchain/core/language_models/chat";
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { Document } from "@langchain/core/documents";
 import { extractVideoId } from "@/lib/youtube/utils";

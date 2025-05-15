@@ -7,6 +7,7 @@ import { QdrantLibArgs } from "@langchain/community/vectorstores/qdrant";
 export async function createVideoSummary(
   allChunks: Document[],
   llmModel: llmModel,
+  // @typescript-eslint/no-unused-vars
   videoId: string
 ): Promise<string> {
   if (!allChunks || allChunks.length === 0)
@@ -88,7 +89,7 @@ export async function processQuery(
 export async function getResponseForQuery(
   query: string,
   // @typescript-eslint/no-explicit-any
-  videoData: any, // @typescript-eslint/no-explicit-any
+  videoData: any,
   llmModel: llmModel
 ): Promise<string> {
   if (!query.trim()) return "Please provide a valid question.";
