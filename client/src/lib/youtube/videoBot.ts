@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any @typescript-eslint/no-unused-vars*/
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { YoutubeTranscript } from "youtube-transcript";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { QdrantVectorStore } from "@langchain/qdrant";

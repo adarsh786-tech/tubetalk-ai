@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any @typescript-eslint/no-unused-vars*/
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from "next/server";
 import { getResponseForQuery } from "@/lib/youtube/queryProcessor";
 import { llmModel } from "@/lib/youtube/utils";
