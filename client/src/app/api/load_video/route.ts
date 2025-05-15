@@ -7,9 +7,11 @@ import { redis } from "@/lib/redis";
 
 export async function POST(req: NextRequest) {
   try {
-    const { videoUrl } = await req.json();
+    const { youtube_url } = await req.json();
 
-    if (!videoUrl || typeof videoUrl !== "string") {
+    console.log("URL: ", youtube_url);
+
+    if (!youtube_url || typeof youtube_url !== "string") {
       return NextResponse.json(
         { error: "Missing or invalid videoUrl" },
         { status: 400 }
@@ -17,7 +19,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { videoId, summary, fullTranscript } = await setupVideoBot(
-      videoUrl,
+      youtube_url,
       llmModel
     );
 
