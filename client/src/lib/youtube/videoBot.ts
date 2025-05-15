@@ -7,7 +7,6 @@ import {
   createVideoSummary,
   uploadInChunks,
 } from "@/lib/youtube/queryProcessor";
-import { TranscriptEntry } from "@/lib/youtube/types";
 
 export async function setupVideoBot(
   videoUrl: string,
@@ -20,7 +19,7 @@ export async function setupVideoBot(
   if (!transcript || transcript.length === 0) {
     throw new Error("Could not retrieve transcript.");
   }
-
+  // @typescript-eslint/no-explicit-any
   const transcriptDocs: Document[] = transcript.map((entry: any) => {
     // Ensure entry has the required TranscriptEntry properties
     const start = entry.start ?? 0;
