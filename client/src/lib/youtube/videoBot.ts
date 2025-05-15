@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { YoutubeTranscript } from "youtube-transcript";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { QdrantVectorStore } from "@langchain/qdrant";
@@ -19,7 +20,7 @@ export async function setupVideoBot(
   if (!transcript || transcript.length === 0) {
     throw new Error("Could not retrieve transcript.");
   }
-  // @typescript-eslint/no-explicit-any
+
   const transcriptDocs: Document[] = transcript.map((entry: any) => {
     // Ensure entry has the required TranscriptEntry properties
     const start = entry.start ?? 0;
