@@ -3,12 +3,12 @@ import { Document } from "@langchain/core/documents";
 import {llmModel} from "@/lib/youtube/utils"
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { QdrantLibArgs } from "@langchain/community/vectorstores/qdrant";
+import {VideoData} from "@/lib/youtube/types"
 
 export async function createVideoSummary(
   allChunks: Document[],
   llmModel: llmModel,
-  // @typescript-eslint/no-unused-vars
-  videoId: string
+  _videoId: string
 ): Promise<string> {
   if (!allChunks || allChunks.length === 0)
     return "No transcript content available to summarize.";
@@ -88,8 +88,7 @@ export async function processQuery(
 
 export async function getResponseForQuery(
   query: string,
-  // @typescript-eslint/no-explicit-any
-  videoData: any,
+  videoData: VideoData,
   llmModel: llmModel
 ): Promise<string> {
   if (!query.trim()) return "Please provide a valid question.";
