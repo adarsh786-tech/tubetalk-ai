@@ -1,27 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from "next/server";
-import { getResponseForQuery } from "@/lib/youtube/queryProcessor";
+import { setupVideoBot } from "@/lib/youtube/videoBot";
 import { llmModel } from "@/lib/youtube/utils";
+import { redis } from "@/lib/redis";
 
 export async function POST(req: NextRequest) {
-  const { video_id, question } = await req.json();
-  const videoCache = globalThis.videoCache || {};
-
-  if (!videoCache[video_id]) {
-    return NextResponse.json(
-      { error: "Video not processed yet." },
-      { status: 404 }
-    );
-  }
-
   try {
-    const answer = await getResponseForQuery(
-      question,
-      videoCache[video_id],
+    const { videoUrl } = await req.json();
+    const { videoId, summary, fullTranscript } = await setupVideoBot(
+      videoUrl,
       llmModel
     );
-    return NextResponse.json({ answer });
+
+    // Save summary and status to Redis
+    await redis.set(`video:${videoId}:status`, "ready");
+    await redis.set(`video:${videoId}:summary`, summary);
+    await redis.set(`video:${videoId}:transcript`, fullTranscript); // optional
+
+    return NextResponse.json({
+      message: "Video processed successfully",
+      videoId,
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
