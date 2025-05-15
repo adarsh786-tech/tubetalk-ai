@@ -1,18 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any @typescript-eslint/no-unused-vars*/
 import { Document } from "@langchain/core/documents";
-import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
-import { QdrantVectorStore } from "@langchain/qdrant";
 
 export interface VideoData {
   videoId: string;
-  vectorStore: QdrantVectorStore;
-  embedder: GoogleGenerativeAIEmbeddings;
+  vectorStore: any;
+  embedder: any;
   transcriptDocs: Document[];
   summary: string;
   fullTranscript: string;
-}
-
-export interface TranscriptEntry {
-  text: string;
-  start: number;
-  duration: number;
 }

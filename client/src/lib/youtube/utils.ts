@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any @typescript-eslint/no-unused-vars*/
 import dotenv from "dotenv";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
@@ -13,4 +14,3 @@ export function extractVideoId(url: string): string | null {
   const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11}).*/);
   return match ? match[1] : null;
 }
-

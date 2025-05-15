@@ -1,19 +1,27 @@
+/* eslint-disable @typescript-eslint/no-explicit-any @typescript-eslint/no-unused-vars*/
 import { NextRequest, NextResponse } from "next/server";
-import { setupVideoBot } from "@/lib/youtube/videoBot";
+import { getResponseForQuery } from "@/lib/youtube/queryProcessor";
 import { llmModel } from "@/lib/youtube/utils";
 
 export async function POST(req: NextRequest) {
-  try {
-    const { youtube_url } = await req.json();
-    const videoData = await setupVideoBot(youtube_url, llmModel);
-    globalThis.videoCache ||= {};
-    globalThis.videoCache[videoData.videoId] = videoData;
+  const { video_id, question } = await req.json();
+  const videoCache = globalThis.videoCache || {};
 
-    return NextResponse.json({
-      video_id: videoData.videoId,
-      summary: videoData.summary,
-    });
-  } catch (error) {
-    return NextResponse.json({ error: error }, { status: 500 });
+  if (!videoCache[video_id]) {
+    return NextResponse.json(
+      { error: "Video not processed yet." },
+      { status: 404 }
+    );
+  }
+
+  try {
+    const answer = await getResponseForQuery(
+      question,
+      videoCache[video_id],
+      llmModel
+    );
+    return NextResponse.json({ answer });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

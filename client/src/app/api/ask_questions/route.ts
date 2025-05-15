@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any @typescript-eslint/no-unused-vars*/
 import { NextRequest, NextResponse } from "next/server";
 import { getResponseForQuery } from "@/lib/youtube/queryProcessor";
 import { llmModel } from "@/lib/youtube/utils";
@@ -20,7 +21,7 @@ export async function POST(req: NextRequest) {
       llmModel
     );
     return NextResponse.json({ answer });
-  } catch (error) {
-    return NextResponse.json({ error: error }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

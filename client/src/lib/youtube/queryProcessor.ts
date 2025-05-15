@@ -1,18 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any @typescript-eslint/no-unused-vars*/
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { Document } from "@langchain/core/documents";
-import { llmModel } from "@/lib/youtube/utils";
-import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
-import { QdrantLibArgs } from "@langchain/community/vectorstores/qdrant";
-import { VideoData } from "@/lib/youtube/types";
 
-// Fixed: use typeof llmModel
 export async function createVideoSummary(
   allChunks: Document[],
-  llmModelInstance: typeof llmModel,
+  llmModel: any,
   videoId: string
 ): Promise<string> {
   if (!allChunks || allChunks.length === 0)
-    return `No transcript content available for ${videoId} to summarize.`;
+    return "No transcript content available to summarize.";
 
   let sampledChunks: Document[] = [];
   const totalChunks = allChunks.length;
@@ -44,26 +40,15 @@ export async function createVideoSummary(
     { role: "user", content: combinedContent },
   ];
 
-  const res = await llmModelInstance.invoke(messages);
-  if (typeof res.content === "string") {
-    return res.content;
-  } else if (Array.isArray(res.content)) {
-    return (
-      res.content
-        .map((c) => (typeof c === "string" ? c : ""))
-        .join(" ")
-        .trim() || "Unable to generate summary."
-    );
-  } else {
-    return "Unable to generate summary.";
-  }
+  const res = await llmModel.invoke(messages);
+  return res.content || "Unable to generate summary.";
 }
 
 export async function uploadInChunks(
   docs: Document[],
-  embedder: GoogleGenerativeAIEmbeddings,
+  embedder: any,
   batchSize: number,
-  options: QdrantLibArgs
+  options: any
 ) {
   for (let i = 0; i < docs.length; i += batchSize) {
     const chunk = docs.slice(i, i + batchSize);
@@ -84,7 +69,7 @@ export async function uploadInChunks(
 
 export async function processQuery(
   query: string,
-  llmModelInstance: typeof llmModel,
+  llmModel: any,
   systemPrompt: string
 ): Promise<string> {
   if (!query.trim()) return "Please provide a valid question about the video.";
@@ -94,26 +79,14 @@ export async function processQuery(
     { role: "user", content: query },
   ];
 
-  const res = await llmModelInstance.invoke(messages);
-  if (typeof res.content === "string") {
-    return res.content;
-  } else if (Array.isArray(res.content)) {
-    return (
-      res.content
-        .map((c) => (typeof c === "string" ? c : ""))
-        .join(" ")
-        .trim() || "No response generated."
-    );
-  } else {
-    return "No response generated.";
-  }
+  const res = await llmModel.invoke(messages);
+  return res.content || "No response generated.";
 }
 
-// Fixed: use typeof llmModel
 export async function getResponseForQuery(
   query: string,
-  videoData: VideoData,
-  llmModelInstance: typeof llmModel
+  videoData: any,
+  llmModel: any
 ): Promise<string> {
   if (!query.trim()) return "Please provide a valid question.";
 
@@ -140,7 +113,7 @@ export async function getResponseForQuery(
 
   const systemPrompt = `You are a helpful AI Assistant for a YouTube video.
 
-If the user asks something that isn't covered in the transcript, feel free to answer from your general knowledge but also tell the user to keep the chat relevant to the video.
+  If the user asks something that isn't covered in the transcript, feel free to answer from your general knowledge but also tell the user to keep the chat relevant to the video.
 
 Video Summary:
 ${videoData.summary || "No summary available."}
@@ -157,5 +130,5 @@ Instructions:
     return `Here's a summary of the video:\n\n${videoData.summary}`;
   }
 
-  return await processQuery(query, llmModelInstance, systemPrompt);
+  return await processQuery(query, llmModel, systemPrompt);
 }

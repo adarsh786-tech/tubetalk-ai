@@ -1,18 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any @typescript-eslint/no-unused-vars*/
 import { YoutubeTranscript } from "youtube-transcript";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { Document } from "@langchain/core/documents";
-import { extractVideoId, llmModel } from "@/lib/youtube/utils";
+import { extractVideoId } from "./utils";
 import {
   createVideoSummary,
   uploadInChunks,
 } from "@/lib/youtube/queryProcessor";
 
-export async function setupVideoBot(
-  videoUrl: string,
-  llmModelInstance: typeof llmModel
-) {
+export async function setupVideoBot(videoUrl: string, llmModel: any) {
   const videoId = extractVideoId(videoUrl);
   if (!videoId) throw new Error("Invalid YouTube URL");
 
@@ -22,8 +19,7 @@ export async function setupVideoBot(
   }
 
   const transcriptDocs: Document[] = transcript.map((entry: any) => {
-    // Ensure entry has the required TranscriptEntry properties
-    const start = entry.start ?? 0;
+    const start = entry.start;
     const mins = Math.floor(start / 60);
     const hrs = Math.floor(mins / 60);
     const timestamp = `${String(hrs).padStart(2, "0")}:${String(
@@ -58,11 +54,7 @@ export async function setupVideoBot(
     apiKey: process.env.QDRANT_API_KEY!,
   });
 
-  const summary = await createVideoSummary(
-    filteredDocs,
-    llmModelInstance,
-    videoId
-  );
+  const summary = await createVideoSummary(filteredDocs, llmModel, videoId);
   const fullTranscript = filteredDocs
     .map((doc) => `[${doc.metadata.timestamp}] ${doc.pageContent}`)
     .join("\n");
