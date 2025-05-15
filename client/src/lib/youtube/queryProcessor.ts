@@ -8,10 +8,10 @@ import {VideoData} from "@/lib/youtube/types"
 export async function createVideoSummary(
   allChunks: Document[],
   llmModel: llmModel,
-  _videoId: string
+  videoId: string
 ): Promise<string> {
   if (!allChunks || allChunks.length === 0)
-    return "No transcript content available to summarize.";
+    return `No transcript content available for ${videoId} to summarize.`;
 
   let sampledChunks: Document[] = [];
   const totalChunks = allChunks.length;
