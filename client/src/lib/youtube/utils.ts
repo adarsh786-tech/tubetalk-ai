@@ -11,7 +11,8 @@ export const llmModel = new ChatGoogleGenerativeAI({
   maxRetries: 2,
 });
 
-export function extractVideoId(url: string): string | null {
+export function extractVideoId(url: string | undefined): string | null {
+  if (!url) return null;
   const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11}).*/);
   return match ? match[1] : null;
 }
