@@ -1,7 +1,9 @@
-import { VideoData } from "@/lib/youtube/types";
+declare module "youtube-transcript-api" {
+  export interface TranscriptResponse {
+    text: string;
+    duration: number;
+    offset: number;
+  }
 
-declare global {
-  var videoCache: Record<string, VideoData> | undefined;
+  export function getTranscript(videoId: string): Promise<TranscriptResponse[]>;
 }
-
-export {};
