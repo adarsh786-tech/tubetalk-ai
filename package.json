@@ -16,6 +16,7 @@
     "@qdrant/js-client-rest": "^1.14.0",
     "@radix-ui/react-slot": "^1.2.0",
     "@upstash/redis": "^1.34.9",
+    "@vercel/analytics": "^1.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.5.0",
